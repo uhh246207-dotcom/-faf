@@ -31,6 +31,7 @@ import type {
   DesignServiceKey,
   GameKey,
 } from '@/content/types';
+import { routing } from '@/i18n/routing';
 import { GameBadge, GAME_BRANDS } from '@/components/brand-logos';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -57,8 +58,7 @@ const DESIGN_THEME: Record<DesignServiceKey, { from: string; to: string }> = {
 
 export async function generateStaticParams() {
   // Static-render every locale × slug combination
-  const locales = ['zh', 'en'];
-  return locales.flatMap((locale) =>
+  return routing.locales.flatMap((locale) =>
     products.map((p) => ({ locale, slug: p.slug }))
   );
 }
@@ -112,7 +112,7 @@ export default async function ProductPage({
             className="inline-flex items-center gap-1.5 text-[13px] text-fg-muted hover:text-accent-1 transition-colors mb-6"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-            {site.nav.store}
+            {site.store.backToStore}
           </Link>
 
           <div className="grid gap-10 lg:grid-cols-12 items-start">
@@ -177,15 +177,27 @@ export default async function ProductPage({
                 <div className="grid grid-cols-3 gap-3">
                   <TrustItem
                     icon={ShieldCheck}
-                    label={isGame ? 'Authorised channel' : 'Source files included'}
+                    label={
+                      isGame
+                        ? site.store.trustGameChannel
+                        : site.store.trustDesignSource
+                    }
                   />
                   <TrustItem
                     icon={Zap}
-                    label={isGame ? 'Delivered in minutes' : 'On-time delivery'}
+                    label={
+                      isGame
+                        ? site.store.trustGameDelivery
+                        : site.store.trustDesignDelivery
+                    }
                   />
                   <TrustItem
                     icon={Star}
-                    label={isGame ? '99% success rate' : '2 free revisions'}
+                    label={
+                      isGame
+                        ? site.store.trustGameSuccess
+                        : site.store.trustDesignRevisions
+                    }
                   />
                 </div>
               </div>
@@ -203,13 +215,12 @@ export default async function ProductPage({
 
                 <ProductPurchasePanel
                   product={product}
-                  primaryCta={site.store.primaryCta}
-                  detailsCta={site.store.detailsCta}
+                  strings={site.store}
                 />
 
                 <div className="mt-7">
                   <h2 className="text-[12px] font-semibold uppercase tracking-eyebrow text-fg-muted mb-3">
-                    Highlights
+                    {site.store.highlightsLabel}
                   </h2>
                   <ul className="space-y-2.5">
                     {product.highlights.map((h) => (
@@ -233,7 +244,7 @@ export default async function ProductPage({
           {/* Description */}
           <section className="mt-20 md:mt-28 max-w-[720px]">
             <h2 className="text-[13px] font-semibold uppercase tracking-eyebrow text-accent-1 mb-3">
-              About this product
+              {site.store.aboutHeading}
             </h2>
             <p className="text-fg-body leading-8 text-[15.5px]">
               {product.description}
@@ -244,10 +255,10 @@ export default async function ProductPage({
           {related.length > 0 && (
             <section className="mt-24 md:mt-32 pb-24 md:pb-32">
               <h2 className="text-[13px] font-semibold uppercase tracking-eyebrow text-accent-1 mb-4">
-                You may also like
+                {site.store.relatedHeading}
               </h2>
               <p className="text-2xl md:text-3xl font-bold text-fg tracking-tightish mb-10">
-                More from {site.brand.name}
+                {site.store.moreFromBrand.replace('{brand}', site.brand.name)}
               </p>
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {related.slice(0, 4).map((p) => (

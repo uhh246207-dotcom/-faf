@@ -1,21 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, ShoppingCart } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { ShoppingBag } from 'lucide-react';
+import { AddToCartButton } from '@/components/cart/AddToCartButton';
 import { cn } from '@/lib/utils';
-import type { Product } from '@/content/types';
+import type { Product, SiteContent } from '@/content/types';
 
 interface Props {
   product: Product;
-  primaryCta: string;
-  detailsCta: string;
+  strings: SiteContent['store'];
 }
 
-export function ProductPurchasePanel({
-  product,
-  primaryCta,
-  detailsCta,
-}: Props) {
+export function ProductPurchasePanel({ product, strings }: Props) {
+  const t = useTranslations('Shop');
   const [selectedId, setSelectedId] = useState<string>(
     product.variants[0]?.id ?? ''
   );
@@ -23,16 +21,32 @@ export function ProductPurchasePanel({
   const selected =
     product.variants.find((v) => v.id === selectedId) ?? product.variants[0];
 
+  const cartLine = {
+    productSlug: product.slug,
+    variantId: selected.id,
+    name: product.name,
+    variantLabel: selected.label,
+    price: selected.price,
+    currency: product.currency,
+    category: product.category,
+    brand: product.brand,
+    service: product.service,
+  };
+
   return (
     <div>
       {/* Variants */}
       <fieldset>
         <legend className="text-[12px] font-semibold uppercase tracking-eyebrow text-fg-muted mb-3">
-          Pick a package
+          {strings.pickPackage}
         </legend>
         <div className="grid gap-2">
           {product.variants.map((v) => {
             const active = v.id === selectedId;
+            const onSale =
+              v.originalPrice && v.originalPrice > v.price
+                ? Math.round((1 - v.price / v.originalPrice) * 100)
+                : null;
             return (
               <label
                 key={v.id}
@@ -55,6 +69,11 @@ export function ProductPurchasePanel({
                   <span className="text-[14.5px] font-medium text-fg">
                     {v.label}
                   </span>
+                  {onSale !== null && (
+                    <span className="inline-flex items-center rounded-full bg-pink-50 text-pink-700 border border-pink-200 px-2 h-5 text-[10.5px] font-semibold tracking-tight">
+                      −{onSale}%
+                    </span>
+                  )}
                 </span>
                 <span className="text-right">
                   {v.originalPrice && v.originalPrice > v.price && (
@@ -78,9 +97,9 @@ export function ProductPurchasePanel({
       <div className="mt-5 flex items-end justify-between">
         <div>
           <p className="text-[12px] uppercase tracking-eyebrow text-fg-muted">
-            Total
+            {strings.total}
           </p>
-          <p className="text-3xl font-bold tracking-tightish text-fg mt-0.5">
+          <p className="text-3xl font-bold tracking-tightish text-fg mt-0.5 tabular-nums">
             {product.currency}
             {selected.price.toLocaleString('en-US')}
           </p>
@@ -89,21 +108,28 @@ export function ProductPurchasePanel({
 
       {/* CTAs */}
       <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
-        <button
-          type="button"
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-accent-grad text-white h-12 px-5 text-[15px] font-medium shadow-pill hover:-translate-y-0.5 transition-all duration-200"
-        >
-          <ShoppingCart className="h-4 w-4" aria-hidden="true" />
-          {primaryCta}
-        </button>
-        <button
-          type="button"
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-white border border-border text-fg h-12 px-5 text-[15px] font-medium hover:border-accent-1 hover:text-accent-1 transition-colors"
-        >
-          {detailsCta}
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-        </button>
+        {/* Primary — "Buy now" adds the line and opens the cart drawer */}
+        <AddToCartButton
+          line={cartLine}
+          openOnAdd
+          label={strings.primaryCta}
+          variant="primary"
+        />
+
+        {/* Secondary — quiet add-to-cart, stays on the page */}
+        <AddToCartButton
+          line={cartLine}
+          openOnAdd={false}
+          label={t('addToCart')}
+          variant="secondary"
+        />
       </div>
+
+      {/* Reassurance */}
+      <p className="mt-4 inline-flex items-center gap-1.5 text-[12.5px] text-fg-muted">
+        <ShoppingBag className="h-3.5 w-3.5 text-accent-1" aria-hidden="true" />
+        {strings.trustGameDelivery}
+      </p>
     </div>
   );
 }

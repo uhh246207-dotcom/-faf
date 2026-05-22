@@ -1,0 +1,39 @@
+{
+  "Meta": {
+    "title": "xfein · Nạp game & thiết kế, một nơi duy nhất",
+    "description": "Nạp chính ngạch Roblox, Liên Quân, Free Fire, Play Together, LoL, FIFA, Genshin — kết hợp dịch vụ thiết kế logo, banner, thumbnail và YouTube. Tất cả tại xfein."
+  },
+  "A11y": {
+    "skipToContent": "Bỏ qua tới nội dung chính",
+    "marqueeLabel": "Danh sách game và dịch vụ hỗ trợ"
+  },
+  "Shop": {
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Tìm game và dịch vụ…",
+    "searchEmpty": "Không có kết quả phù hợp",
+    "searchRecent": "Phổ biến",
+    "searchKbdHint": "⌘K",
+    "cart": "Giỏ hàng",
+    "cartTitle": "Giỏ hàng của bạn",
+    "cartEmpty": "Giỏ hàng đang trống",
+    "cartEmptyHint": "Vào cửa hàng để thêm sản phẩm nhé.",
+    "cartSubtotal": "Tạm tính",
+    "cartCheckout": "Thanh toán",
+    "cartCheckoutHint": "Thanh toán sẽ sớm mở — giỏ hàng đã được lưu.",
+    "cartClear": "Xoá giỏ hàng",
+    "cartRemoveItem": "Xoá sản phẩm",
+    "cartQty": "Số lượng",
+    "cartContinueShopping": "Tiếp tục mua sắm",
+    "addToCart": "Thêm vào giỏ",
+    "addedToCart": "Đã thêm vào giỏ",
+    "openCart": "Mở giỏ hàng",
+    "closeCart": "Đóng giỏ hàng",
+    "language": "Ngôn ngữ",
+    "scrollToTop": "Lên đầu trang",
+    "viewCart": "Xem giỏ hàng",
+    "menuOpen": "Mở menu",
+    "menuClose": "Đóng menu",
+    "close": "Đóng",
+    "items": "{count, plural, =0 {Không có sản phẩm} other {# sản phẩm}}"
+  }
+}

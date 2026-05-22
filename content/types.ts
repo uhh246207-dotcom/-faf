@@ -143,6 +143,21 @@ export interface SiteContent {
     sortPopular: string;
     sortPriceAsc: string;
     sortPriceDesc: string;
+    /* Product detail page */
+    backToStore: string;
+    pickPackage: string;
+    total: string;
+    highlightsLabel: string;
+    aboutHeading: string;
+    relatedHeading: string;
+    /** {brand} placeholder. Replace at render time. */
+    moreFromBrand: string;
+    trustGameChannel: string;
+    trustGameDelivery: string;
+    trustGameSuccess: string;
+    trustDesignSource: string;
+    trustDesignDelivery: string;
+    trustDesignRevisions: string;
   };
 }
 

@@ -6,5 +6,34 @@
   "A11y": {
     "skipToContent": "跳到主内容",
     "marqueeLabel": "支持的游戏与服务列表"
+  },
+  "Shop": {
+    "search": "搜索",
+    "searchPlaceholder": "搜索游戏与服务…",
+    "searchEmpty": "没有匹配的产品",
+    "searchRecent": "热门",
+    "searchKbdHint": "⌘K",
+    "cart": "购物车",
+    "cartTitle": "你的购物车",
+    "cartEmpty": "购物车空空如也",
+    "cartEmptyHint": "去商城看看，挑一个心仪的吧。",
+    "cartSubtotal": "小计",
+    "cartCheckout": "结算",
+    "cartCheckoutHint": "结算流程稍后开放，已为你保存购物车。",
+    "cartClear": "清空购物车",
+    "cartRemoveItem": "移除商品",
+    "cartQty": "数量",
+    "cartContinueShopping": "继续购物",
+    "addToCart": "加入购物车",
+    "addedToCart": "已加入购物车",
+    "openCart": "打开购物车",
+    "closeCart": "关闭购物车",
+    "language": "语言",
+    "scrollToTop": "回到顶部",
+    "viewCart": "查看购物车",
+    "menuOpen": "打开菜单",
+    "menuClose": "关闭菜单",
+    "close": "关闭",
+    "items": "{count, plural, =0 {无商品} other {# 件商品}}"
   }
 }

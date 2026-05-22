@@ -6,5 +6,34 @@
   "A11y": {
     "skipToContent": "Skip to main content",
     "marqueeLabel": "Supported games and services"
+  },
+  "Shop": {
+    "search": "Search",
+    "searchPlaceholder": "Search games and services…",
+    "searchEmpty": "No products match",
+    "searchRecent": "Popular",
+    "searchKbdHint": "⌘K",
+    "cart": "Cart",
+    "cartTitle": "Your cart",
+    "cartEmpty": "Your cart is empty",
+    "cartEmptyHint": "Browse the store to add an item.",
+    "cartSubtotal": "Subtotal",
+    "cartCheckout": "Checkout",
+    "cartCheckoutHint": "Checkout opens soon — your cart is saved.",
+    "cartClear": "Clear cart",
+    "cartRemoveItem": "Remove item",
+    "cartQty": "Qty",
+    "cartContinueShopping": "Continue shopping",
+    "addToCart": "Add to cart",
+    "addedToCart": "Added to cart",
+    "openCart": "Open cart",
+    "closeCart": "Close cart",
+    "language": "Language",
+    "scrollToTop": "Back to top",
+    "viewCart": "View cart",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "close": "Close",
+    "items": "{count, plural, =0 {No items} =1 {# item} other {# items}}"
   }
 }
