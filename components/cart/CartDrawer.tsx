@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
+  Check,
   Minus,
   Plus,
   ShoppingBag,
+  Tag,
   Trash2,
   X,
 } from 'lucide-react';
@@ -15,13 +17,20 @@ import { useTranslations } from 'next-intl';
 import {
   cartStore,
   hydrateCart,
+  useAppliedCoupon,
   useCart,
   useCartCount,
   useCartTotal,
   type CartLine,
 } from '@/lib/cart';
+import {
+  discountFor,
+  findCoupon,
+  validateCoupon,
+} from '@/lib/coupons';
 import { uiStore, useUi } from '@/lib/ui-store';
 import { toast } from '@/lib/toast';
+import { cn } from '@/lib/utils';
 
 const overlay = {
   hidden: { opacity: 0 },
@@ -39,7 +48,12 @@ export function CartDrawer() {
   const t = useTranslations('Shop');
   const lines = useCart();
   const count = useCartCount();
-  const total = useCartTotal();
+  const subtotal = useCartTotal();
+  const couponCode = useAppliedCoupon();
+  const coupon = couponCode ? findCoupon(couponCode) : undefined;
+  const discount = discountFor(coupon, subtotal);
+  const total = Math.max(0, subtotal - discount);
+  const currency = lines[0]?.currency ?? '\u20ab';
 
   /* Hydrate localStorage on first mount */
   useEffect(() => {
@@ -137,17 +151,51 @@ export function CartDrawer() {
                 </ul>
 
                 {/* Footer */}
-                <footer className="border-t border-border bg-bg-soft/60 px-5 py-4">
-                  <div className="flex items-end justify-between mb-3">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-eyebrow text-fg-muted">
-                        {t('cartSubtotal')}
-                      </p>
-                      <p className="text-2xl font-bold tracking-tightish text-fg mt-0.5 tabular-nums">
-                        {lines[0].currency}
-                        {total.toLocaleString('en-US')}
-                      </p>
+                <footer className="border-t border-border bg-bg-soft/60 px-5 py-4 space-y-4">
+                  <CouponInput
+                    code={couponCode}
+                    subtotal={subtotal}
+                    currency={currency}
+                  />
+
+                  {/* Order summary */}
+                  <dl className="space-y-1.5 text-[13.5px]">
+                    <div className="flex items-center justify-between">
+                      <dt className="text-fg-muted">{t('cartSubtotal')}</dt>
+                      <dd className="text-fg tabular-nums">
+                        {currency}
+                        {subtotal.toLocaleString('en-US')}
+                      </dd>
                     </div>
+                    {discount > 0 && (
+                      <div className="flex items-center justify-between text-emerald-600">
+                        <dt>
+                          {t('couponDiscount')}
+                          <span className="ml-1 inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-1.5 h-4 text-[10.5px] font-semibold tracking-tight">
+                            {coupon?.code}
+                          </span>
+                        </dt>
+                        <dd className="tabular-nums">
+                          {'\u2212 '}
+                          {currency}
+                          {discount.toLocaleString('en-US')}
+                        </dd>
+                      </div>
+                    )}
+                    <div className="flex items-end justify-between pt-1.5">
+                      <dt className="text-[12px] uppercase tracking-eyebrow text-fg-muted">
+                        {t('cartTotal')}
+                      </dt>
+                      <dd>
+                        <span className="text-2xl font-bold tracking-tightish text-fg tabular-nums">
+                          {currency}
+                          {total.toLocaleString('en-US')}
+                        </span>
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="flex items-center justify-end gap-3">
                     <button
                       type="button"
                       onClick={() => cartStore.clear()}
@@ -277,5 +325,152 @@ function CartLineRow({
         <X className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
     </li>
+  );
+}
+
+
+/* ============================================================
+   CouponInput — collapsible coupon entry. When no coupon is
+   applied, shows a "Coupon code" toggle that expands to a tiny
+   form. When a coupon IS applied, shows it as a dismissible chip.
+   ============================================================ */
+function CouponInput({
+  code,
+  subtotal,
+  currency,
+}: {
+  code: string | null;
+  subtotal: number;
+  currency: string;
+}) {
+  const t = useTranslations('Shop');
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  /* When a coupon is already applied, render it as a chip. */
+  if (code) {
+    const coupon = findCoupon(code);
+    return (
+      <div className="flex items-center justify-between rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2.5">
+        <span className="flex items-center gap-2 min-w-0">
+          <Check
+            className="h-4 w-4 text-emerald-600 shrink-0"
+            aria-hidden="true"
+          />
+          <span className="min-w-0">
+            <span className="block text-[13px] font-semibold text-emerald-700 leading-tight truncate">
+              {coupon?.code ?? code}
+            </span>
+            <span className="block text-[11.5px] text-emerald-700/80 leading-tight">
+              {t('couponApplied')}
+            </span>
+          </span>
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            cartStore.setCoupon(null);
+            setDraft('');
+            setOpen(false);
+          }}
+          aria-label={t('couponRemove')}
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-emerald-700/80 hover:bg-white hover:text-rose-500 transition-colors"
+        >
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
+        </button>
+      </div>
+    );
+  }
+
+  /* Collapsed trigger. */
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="w-full inline-flex items-center justify-between gap-2 rounded-xl border border-dashed border-border bg-white/60 px-3 py-2.5 text-[13px] text-fg-body hover:border-accent-1 hover:text-accent-1 transition-colors"
+      >
+        <span className="inline-flex items-center gap-2">
+          <Tag className="h-3.5 w-3.5" aria-hidden="true" />
+          {t('couponLabel')}
+        </span>
+        <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+      </button>
+    );
+  }
+
+  /* Expanded form. */
+  const onApply = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    const result = validateCoupon(draft, subtotal);
+    if (!result.ok) {
+      if (result.reason === 'unknown') setError(t('couponInvalid'));
+      else setError(t('couponMin'));
+      return;
+    }
+    cartStore.setCoupon(result.coupon.code);
+    setOpen(false);
+    setDraft('');
+    toast.success(t('couponApplied'), {
+      description:
+        result.coupon.kind === 'percent'
+          ? `\u2212${result.coupon.value}%`
+          : `\u2212 ${currency}${result.coupon.value.toLocaleString('en-US')}`,
+    });
+  };
+
+  return (
+    <form onSubmit={onApply} className="space-y-1.5" noValidate>
+      <div
+        className={cn(
+          'flex items-stretch gap-1 rounded-xl border bg-white px-1 py-1 transition-colors',
+          error
+            ? 'border-rose-300 ring-2 ring-rose-200'
+            : 'border-border focus-within:border-accent-1 focus-within:ring-2 focus-within:ring-accent-1/20'
+        )}
+      >
+        <span className="inline-flex items-center pl-2">
+          <Tag className="h-3.5 w-3.5 text-fg-muted" aria-hidden="true" />
+        </span>
+        <input
+          autoFocus
+          value={draft}
+          onChange={(e) => {
+            setDraft(e.target.value.toUpperCase());
+            if (error) setError(null);
+          }}
+          placeholder={t('couponPlaceholder')}
+          aria-label={t('couponLabel')}
+          aria-invalid={!!error}
+          className="flex-1 min-w-0 bg-transparent px-1.5 h-8 text-[13.5px] uppercase tracking-wide text-fg placeholder:text-fg-muted outline-none"
+        />
+        <button
+          type="submit"
+          disabled={!draft.trim()}
+          className="shrink-0 inline-flex items-center justify-center rounded-lg bg-accent-grad text-white h-8 px-3 text-[12.5px] font-semibold shadow-pill disabled:opacity-50 disabled:hover:translate-y-0 hover:-translate-y-0.5 transition-transform"
+        >
+          {t('couponApply')}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            setDraft('');
+            setError(null);
+          }}
+          aria-label={t('close')}
+          className="shrink-0 inline-flex h-8 w-8 items-center justify-center rounded-lg text-fg-muted hover:bg-bg-soft hover:text-fg transition-colors"
+        >
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
+        </button>
+      </div>
+      {error && (
+        <p role="alert" className="text-[12px] text-rose-600">
+          {error}
+        </p>
+      )}
+    </form>
   );
 }

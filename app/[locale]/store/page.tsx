@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { StoreBanner } from '@/components/store/StoreBanner';
 import { StoreGrid } from '@/components/store/StoreGrid';
+import { RecentlyViewed } from '@/components/store/RecentlyViewed';
 
 export default async function StorePage({
   params,
@@ -39,6 +40,8 @@ export default async function StorePage({
         <Suspense fallback={<GridFallback />}>
           <StoreGrid products={products} strings={site.store} />
         </Suspense>
+
+        <RecentlyViewed strings={site.store} />
       </main>
 
       <Footer brand={site.brand.name} data={site.footer} />

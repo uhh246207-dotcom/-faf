@@ -9,6 +9,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getSiteContent } from '@/content';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { WishlistDrawer } from '@/components/cart/WishlistDrawer';
 import { SearchPalette } from '@/components/search/SearchPalette';
 import { MobileMenu } from '@/components/MobileMenu';
 import { Toaster } from '@/components/Toaster';
@@ -66,6 +67,7 @@ export default async function LocaleLayout({
               and lib/cart, so they're SSR-safe (initial closed/empty). */}
           <MobileMenu brand={site.brand.name} nav={site.nav} />
           <CartDrawer />
+          <WishlistDrawer />
           <SearchPalette />
           <Toaster />
           <ScrollToTop />

@@ -6,6 +6,10 @@ import { useSyncExternalStore } from 'react';
    Cart store — minimal, persisted in localStorage.
    No external deps; uses useSyncExternalStore so any client
    component can subscribe with `useCart()` / `useCartCount()`.
+
+   The store also tracks an applied coupon code (just the raw
+   string). The validation + discount math live in lib/coupons
+   so the cart store itself stays free of pricing rules.
    ============================================================ */
 
 export interface CartLine {
@@ -27,8 +31,10 @@ export interface CartLine {
 }
 
 const STORAGE_KEY = 'xfein:cart:v1';
+const COUPON_KEY = 'xfein:coupon:v1';
 
 let lines: CartLine[] = [];
+let couponCode: string | null = null;
 let hydrated = false;
 const listeners = new Set<() => void>();
 
@@ -40,6 +46,11 @@ function persist() {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
+    if (couponCode) {
+      window.localStorage.setItem(COUPON_KEY, couponCode);
+    } else {
+      window.localStorage.removeItem(COUPON_KEY);
+    }
   } catch {
     /* quota / private mode — ignore */
   }
@@ -64,18 +75,24 @@ export function hydrateCart() {
         );
       }
     }
+    const code = window.localStorage.getItem(COUPON_KEY);
+    if (code) couponCode = code;
   } catch {
     /* corrupt — start fresh */
   }
   // Cross-tab sync: re-hydrate when another tab updates cart
   window.addEventListener('storage', (e) => {
-    if (e.key !== STORAGE_KEY) return;
-    try {
-      lines = e.newValue ? JSON.parse(e.newValue) : [];
-    } catch {
-      lines = [];
+    if (e.key === STORAGE_KEY) {
+      try {
+        lines = e.newValue ? JSON.parse(e.newValue) : [];
+      } catch {
+        lines = [];
+      }
+      emit();
+    } else if (e.key === COUPON_KEY) {
+      couponCode = e.newValue || null;
+      emit();
     }
-    emit();
   });
   emit();
 }
@@ -135,10 +152,25 @@ export const cartStore = {
   },
 
   clear() {
-    if (lines.length === 0) return;
+    if (lines.length === 0 && !couponCode) return;
     lines = [];
+    couponCode = null;
     persist();
     emit();
+  },
+
+  /** Set the applied coupon code (raw, case-preserving — coupons
+   *  module normalises). Pass null/'' to remove. */
+  setCoupon(code: string | null) {
+    const next = code && code.trim() ? code.trim() : null;
+    if (next === couponCode) return;
+    couponCode = next;
+    persist();
+    emit();
+  },
+
+  getCoupon(): string | null {
+    return couponCode;
   },
 };
 
@@ -164,4 +196,16 @@ export function useCartTotal(): number {
   let total = 0;
   for (const l of c) total += l.qty * l.price;
   return total;
+}
+
+/* The applied-coupon hook subscribes to the same store. The
+ * snapshot returns the code string itself so React's referential
+ * equality keeps the component stable when other cart state
+ * changes but the coupon is unchanged. */
+export function useAppliedCoupon(): string | null {
+  return useSyncExternalStore(
+    cartStore.subscribe,
+    () => couponCode,
+    () => null
+  );
 }

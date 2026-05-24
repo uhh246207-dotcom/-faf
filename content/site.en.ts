@@ -188,6 +188,45 @@ export const siteEn: SiteContent = {
     sub: 'Game top-ups in minutes. Design files on schedule. xfein keeps it simple.',
     cta: 'Enter store',
   },
+  testimonials: {
+    eyebrow: 'CUSTOMERS',
+    heading: 'Loved by players and brands',
+    sub: 'Real notes from heavy players, creators and e-commerce operators.',
+    items: [
+      {
+        name: 'Linh Tran',
+        role: 'Free Fire streamer · 120k followers',
+        quote:
+          'Top-ups land faster than the official app — even during double-diamond events.',
+        rating: 5,
+      },
+      {
+        name: 'Mai Anh',
+        role: 'TikTok Shop merchandiser',
+        quote:
+          'Bundled the shop banner, thumbnails and ad set with xfein. Click-through went up noticeably.',
+        rating: 5,
+      },
+      {
+        name: 'Jay Vu',
+        role: 'Genshin Impact creator',
+        quote:
+          'Genesis Crystals through the official channel preserves the first-purchase bonus. Worth every đồng.',
+        rating: 5,
+      },
+    ],
+  },
+  newsletter: {
+    eyebrow: 'NEWSLETTER',
+    heading: 'Subscribe to xfein monthly',
+    sub: 'One email per month. Promotions, new game launches and design template drops.',
+    placeholder: 'Your email address',
+    cta: 'Subscribe',
+    successTitle: 'You\u2019re in',
+    successDesc: 'We\u2019ll send the next monthly digest to your inbox.',
+    invalid: 'Please enter a valid email address',
+    privacy: 'No spam. Unsubscribe any time from the email footer.',
+  },
   footer: {
     tagline: 'Game top-ups + visual design — one studio, one checkout.',
     columns: [

@@ -188,6 +188,45 @@ export const siteVi: SiteContent = {
     sub: 'Nạp game trong vài phút. File thiết kế đúng hạn. xfein giúp mọi việc đơn giản hơn.',
     cta: 'Vào cửa hàng',
   },
+  testimonials: {
+    eyebrow: 'KHÁCH HÀNG',
+    heading: 'Game thủ và brand đều đang dùng',
+    sub: 'Phản hồi thật từ streamer, creator và chủ shop online.',
+    items: [
+      {
+        name: 'Linh Trần',
+        role: 'Streamer Free Fire · 120k follower',
+        quote:
+          'Nạp về nhanh hơn cả app chính chủ — kể cả trong sự kiện double kim cương.',
+        rating: 5,
+      },
+      {
+        name: 'Mai Anh',
+        role: 'Quản lý ngành hàng TikTok Shop',
+        quote:
+          'Đặt cả banner shop, thumbnail và bộ ad với xfein. CTR tăng thấy rõ.',
+        rating: 5,
+      },
+      {
+        name: 'Jay Vũ',
+        role: 'Creator Genshin Impact',
+        quote:
+          'Nạp Genesis qua kênh chính ngạch giữ được bonus first-purchase, rất đáng.',
+        rating: 5,
+      },
+    ],
+  },
+  newsletter: {
+    eyebrow: 'BẢN TIN',
+    heading: 'Đăng ký bản tin xfein hằng tháng',
+    sub: 'Mỗi tháng 1 email: ưu đãi, game mới ra mắt và mẫu thiết kế mới.',
+    placeholder: 'Email của bạn',
+    cta: 'Đăng ký',
+    successTitle: 'Đã đăng ký',
+    successDesc: 'Bản tin tháng tới sẽ gửi tới hộp thư của bạn.',
+    invalid: 'Vui lòng nhập đúng địa chỉ email',
+    privacy: 'Không spam. Có thể huỷ đăng ký bất kỳ lúc nào ở cuối email.',
+  },
   footer: {
     tagline: 'Nạp game + thiết kế hình ảnh — một studio, một lần thanh toán.',
     columns: [

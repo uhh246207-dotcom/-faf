@@ -8,6 +8,7 @@ import {
   Home,
   Store,
   Search,
+  Heart,
   X,
   ArrowRight,
 } from 'lucide-react';
@@ -131,6 +132,24 @@ export function MobileMenu({ brand, nav }: Props) {
                 <kbd className="rounded-full bg-bg-soft border border-border/70 px-2 h-6 inline-flex items-center text-[10.5px] font-semibold text-fg-muted">
                   {t('searchKbdHint')}
                 </kbd>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  uiStore.closeMenu();
+                  uiStore.openWishlist();
+                }}
+                className="flex items-center gap-3 rounded-2xl px-3 py-3 text-fg-body hover:bg-bg-soft hover:text-fg transition-colors"
+              >
+                <Heart className="h-5 w-5 text-rose-500" aria-hidden="true" />
+                <span className="flex-1 text-left text-[15px] font-medium">
+                  {t('wishlist')}
+                </span>
+                <ArrowRight
+                  className="h-4 w-4 text-fg-muted"
+                  aria-hidden="true"
+                />
               </button>
             </nav>
 

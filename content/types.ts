@@ -50,6 +50,32 @@ export interface FaqItem {
   a: string;
 }
 
+export interface Testimonial {
+  /** Display name. */
+  name: string;
+  /** Role + company / channel. */
+  role: string;
+  /** Short quote — 1–2 sentences. */
+  quote: string;
+  /** 1–5. Defaults to 5 when omitted. */
+  rating?: number;
+}
+
+export interface NewsletterContent {
+  eyebrow: string;
+  heading: string;
+  sub: string;
+  placeholder: string;
+  cta: string;
+  /** Toast title shown on successful subscribe. */
+  successTitle: string;
+  successDesc: string;
+  /** Validation message for invalid email. */
+  invalid: string;
+  /** Tiny privacy footnote under the form. */
+  privacy: string;
+}
+
 export interface FooterColumn {
   title: string;
   links: { label: string; href: string }[];
@@ -118,6 +144,13 @@ export interface SiteContent {
     sub: string;
     items: FaqItem[];
   };
+  testimonials: {
+    eyebrow: string;
+    heading: string;
+    sub: string;
+    items: Testimonial[];
+  };
+  newsletter: NewsletterContent;
   ctaBanner: { heading: string; sub: string; cta: string };
   footer: {
     tagline: string;

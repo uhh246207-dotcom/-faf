@@ -12,12 +12,14 @@ export interface UiState {
   cartOpen: boolean;
   searchOpen: boolean;
   menuOpen: boolean;
+  wishlistOpen: boolean;
 }
 
 const SERVER_STATE: UiState = {
   cartOpen: false,
   searchOpen: false,
   menuOpen: false,
+  wishlistOpen: false,
 };
 
 let state: UiState = { ...SERVER_STATE };
@@ -44,7 +46,13 @@ export const uiStore = {
 
   openCart() {
     if (state.cartOpen) return;
-    commit({ ...state, cartOpen: true, searchOpen: false, menuOpen: false });
+    commit({
+      ...state,
+      cartOpen: true,
+      searchOpen: false,
+      menuOpen: false,
+      wishlistOpen: false,
+    });
   },
   closeCart() {
     if (!state.cartOpen) return;
@@ -52,7 +60,13 @@ export const uiStore = {
   },
   openSearch() {
     if (state.searchOpen) return;
-    commit({ ...state, searchOpen: true, cartOpen: false, menuOpen: false });
+    commit({
+      ...state,
+      searchOpen: true,
+      cartOpen: false,
+      menuOpen: false,
+      wishlistOpen: false,
+    });
   },
   closeSearch() {
     if (!state.searchOpen) return;
@@ -64,19 +78,52 @@ export const uiStore = {
       searchOpen: !state.searchOpen,
       cartOpen: false,
       menuOpen: false,
+      wishlistOpen: false,
     });
   },
   openMenu() {
     if (state.menuOpen) return;
-    commit({ ...state, menuOpen: true, cartOpen: false, searchOpen: false });
+    commit({
+      ...state,
+      menuOpen: true,
+      cartOpen: false,
+      searchOpen: false,
+      wishlistOpen: false,
+    });
   },
   closeMenu() {
     if (!state.menuOpen) return;
     commit({ ...state, menuOpen: false });
   },
+  openWishlist() {
+    if (state.wishlistOpen) return;
+    commit({
+      ...state,
+      wishlistOpen: true,
+      cartOpen: false,
+      searchOpen: false,
+      menuOpen: false,
+    });
+  },
+  closeWishlist() {
+    if (!state.wishlistOpen) return;
+    commit({ ...state, wishlistOpen: false });
+  },
   closeAll() {
-    if (!state.cartOpen && !state.searchOpen && !state.menuOpen) return;
-    commit({ cartOpen: false, searchOpen: false, menuOpen: false });
+    if (
+      !state.cartOpen &&
+      !state.searchOpen &&
+      !state.menuOpen &&
+      !state.wishlistOpen
+    ) {
+      return;
+    }
+    commit({
+      cartOpen: false,
+      searchOpen: false,
+      menuOpen: false,
+      wishlistOpen: false,
+    });
   },
 };
 

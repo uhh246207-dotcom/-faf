@@ -7,6 +7,8 @@ import { BrandShowcase } from '@/components/BrandShowcase';
 import { ServiceCommitment } from '@/components/ServiceCommitment';
 import { HowItWorks } from '@/components/HowItWorks';
 import { FeaturedProducts } from '@/components/FeaturedProducts';
+import { Testimonials } from '@/components/Testimonials';
+import { Newsletter } from '@/components/Newsletter';
 import { FAQ } from '@/components/FAQ';
 import { CTABanner } from '@/components/CTABanner';
 import { Footer } from '@/components/Footer';
@@ -43,9 +45,11 @@ export default async function HomePage({
           products={featured}
           storeStrings={site.store}
         />
+        <Testimonials data={site.testimonials} />
         <ServiceCommitment data={site.serviceCommitment} />
         <HowItWorks data={site.howItWorks} />
         <FAQ data={site.faq} />
+        <Newsletter data={site.newsletter} />
         <CTABanner data={site.ctaBanner} />
       </main>
 

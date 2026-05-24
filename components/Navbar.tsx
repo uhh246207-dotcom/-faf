@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { XfeinMark } from '@/components/brand-logos';
 import { CartButton } from '@/components/cart/CartButton';
+import { WishlistButton } from '@/components/cart/WishlistButton';
 import { SearchButton } from '@/components/search/SearchButton';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { uiStore } from '@/lib/ui-store';
@@ -119,9 +120,10 @@ export function Navbar({
             className="mx-0.5 h-6 w-px bg-border/70"
           />
 
-          {/* Right cluster: search · locale · cart */}
+          {/* Right cluster: search · wishlist · locale · cart */}
           <div className="flex items-center gap-0.5">
             <SearchButton compact />
+            <WishlistButton compact />
             <LocaleSwitcher compact />
             <CartButton compact />
           </div>

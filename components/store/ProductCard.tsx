@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { GameBadge, GAME_BRANDS } from '@/components/brand-logos';
+import { SaveButton } from '@/components/store/SaveButton';
 import type {
   DesignServiceKey,
   GameKey,
@@ -166,12 +167,13 @@ export function ProductCard({ product, strings }: Props) {
           </div>
         )}
 
-        {/* Top-right brand badge */}
-        {game && (
-          <span className="absolute top-3 right-3">
+        {/* Top-right brand badge + save heart */}
+        <div className="absolute top-3 right-3 flex items-center gap-1.5">
+          <SaveButton slug={product.slug} />
+          {game && (
             <GameBadge brand={product.brand as GameKey} size={32} rounded="lg" />
-          </span>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Body */}

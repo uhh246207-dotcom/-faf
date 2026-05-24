@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ShoppingBag } from 'lucide-react';
 import { AddToCartButton } from '@/components/cart/AddToCartButton';
+import { SaveButton } from '@/components/store/SaveButton';
 import { cn } from '@/lib/utils';
 import type { Product, SiteContent } from '@/content/types';
 
@@ -107,13 +108,14 @@ export function ProductPurchasePanel({ product, strings }: Props) {
       </div>
 
       {/* CTAs */}
-      <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
+      <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
         {/* Primary — "Buy now" adds the line and opens the cart drawer */}
         <AddToCartButton
           line={cartLine}
           openOnAdd
           label={strings.primaryCta}
           variant="primary"
+          className="flex-1 min-w-[160px]"
         />
 
         {/* Secondary — quiet add-to-cart, stays on the page */}
@@ -122,6 +124,15 @@ export function ProductPurchasePanel({ product, strings }: Props) {
           openOnAdd={false}
           label={t('addToCart')}
           variant="secondary"
+          className="flex-1 min-w-[140px]"
+        />
+
+        {/* Save / wishlist — heart toggle */}
+        <SaveButton
+          slug={product.slug}
+          variant="button"
+          stopPropagation={false}
+          className="sm:flex-none"
         />
       </div>
 

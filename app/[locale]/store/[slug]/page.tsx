@@ -37,6 +37,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ProductCard } from '@/components/store/ProductCard';
 import { ProductPurchasePanel } from '@/components/store/ProductPurchasePanel';
+import { TrackProductView } from '@/components/store/TrackProductView';
 
 const DESIGN_ICON: Record<DesignServiceKey, LucideIcon> = {
   logo: Palette,
@@ -100,6 +101,8 @@ export default async function ProductPage({
       </a>
 
       <Navbar brand={site.brand.name} nav={site.nav} />
+
+      <TrackProductView slug={slug} />
 
       <main id="main" className="pt-32 md:pt-36">
         {/* Pastel mesh behind the hero */}

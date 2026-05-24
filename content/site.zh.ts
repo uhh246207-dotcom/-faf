@@ -188,6 +188,42 @@ export const siteZh: SiteContent = {
     sub: '游戏充值秒到账，设计交付有保障。xfein 让一切更简单。',
     cta: '进入商城',
   },
+  testimonials: {
+    eyebrow: 'CUSTOMERS',
+    heading: '玩家与品牌方都在用',
+    sub: '真实订单留言。来自高强度玩家、内容创作者与电商运营。',
+    items: [
+      {
+        name: '林子谦',
+        role: '《Free Fire》直播主 · 12 万粉丝',
+        quote: '抢点券比官方还稳，活动期也是 5 分钟内到账，不夸张。',
+        rating: 5,
+      },
+      {
+        name: 'Mai Anh',
+        role: 'TikTok Shop 选品主理人',
+        quote: '让 xfein 把店铺横幅、缩略图、推广图整套打包，转换率提升明显。',
+        rating: 5,
+      },
+      {
+        name: '阿杰',
+        role: '《Genshin》主播',
+        quote: '原石充值有首充加成，比自己挂代充安心多了。',
+        rating: 5,
+      },
+    ],
+  },
+  newsletter: {
+    eyebrow: 'NEWSLETTER',
+    heading: '订阅 xfein 月报',
+    sub: '每月 1 封，整理活动折扣、新游戏上架与设计模板更新。',
+    placeholder: '输入你的邮箱地址',
+    cta: '订阅',
+    successTitle: '订阅成功',
+    successDesc: '我们会把每月最新资讯发到你的邮箱。',
+    invalid: '请输入有效的邮箱地址',
+    privacy: '我们不发送广告，随时可在邮件底部退订。',
+  },
   footer: {
     tagline: '游戏充值 + 视觉设计，一站式解决方案。',
     columns: [
