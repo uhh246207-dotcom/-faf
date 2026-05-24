@@ -1,0 +1,14 @@
+{
+  "task_id": "task-redemption-code-system",
+  "task_description": "Replace direct payment with a redemption code system. Admin creates one-time-use codes with token amounts. Customers redeem codes to get tokens. Add automatic tier/rank system based on render count. Add admin panel to view all code redemption history for verification purposes.",
+  "status": "completed",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null,
+  "verification": {
+    "build": "pass",
+    "tests": "pass",
+    "test_quality": "skipped",
+    "docker_build": "skipped",
+    "summary": "All PHP files pass php -l syntax checks. Review fixes applied: TYPE_REDEEM via new redeem() method, throttle on /redeem-code, DB::transaction on generateCodes, max-attempts guard on generateUniqueCode, route param renamed to {redemptionCode}, cascadeOnDelete changed to nullOnDelete, TierService wrapped in try/catch in RenderPsdJob."
+  }
+}
