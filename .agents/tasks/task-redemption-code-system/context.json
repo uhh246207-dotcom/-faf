@@ -1,0 +1,33 @@
+{
+  "project_type": "Laravel 11 PSD Template Editor with Blade views, Tailwind CSS CDN, and Alpine.js",
+  "language": "PHP 8.2+",
+  "build_system": "Composer (Laravel 11). No build step needed - uses CDN for Tailwind and Alpine.js",
+  "test_framework": "PHPUnit 11 via phpunit.xml. No existing test files found.",
+  "build_command": "php artisan route:list (validate routes compile correctly)",
+  "test_command": "No tests exist yet. Validation is via syntax checks: php -l on new files.",
+  "verification_instructions": "1. Run php -l on all new PHP files to confirm no syntax errors. 2. Run php artisan route:list to verify routes register properly (requires vendor/ which is not available in INTEGRATIONS_ONLY mode). 3. Manual code review for correctness.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "composer install, cp .env.example .env, php artisan key:generate, php artisan migrate, php artisan db:seed",
+  "environment_constraints": "INTEGRATIONS_ONLY - cannot install packages via composer/npm. Cannot run php artisan commands (no vendor/). Create source files only. Validate via PHP syntax checking (php -l).",
+  "contribution_requirements": "Follow existing Laravel 11 conventions. Use Blade views with layouts/admin.blade.php for admin pages and layouts/app.blade.php for customer pages. Use Tailwind CSS CDN and Alpine.js CDN. Controllers in app/Http/Controllers/Admin/ for admin features. Models in app/Models/. Services in app/Services/.",
+  "key_patterns": "1. Admin middleware checks role=admin. 2. TokenService handles deduct/refund/credit with DB transactions. 3. Models use fillable arrays and casts. 4. Admin views extend layouts.admin, customer views extend layouts.app. 5. Routes grouped by auth middleware and admin middleware. 6. Token transactions track type (deduct/refund/credit) with descriptions. 7. Admin sidebar nav in layouts/admin.blade.php has links to each admin section.",
+  "relevant_files": [
+    "routes/web.php",
+    "app/Models/User.php",
+    "app/Models/TokenTransaction.php",
+    "app/Models/Render.php",
+    "app/Services/TokenService.php",
+    "app/Http/Controllers/Admin/UserController.php",
+    "app/Http/Controllers/Admin/DashboardController.php",
+    "app/Http/Middleware/AdminMiddleware.php",
+    "resources/views/layouts/admin.blade.php",
+    "resources/views/layouts/app.blade.php",
+    "resources/views/admin/dashboard.blade.php",
+    "resources/views/admin/users/index.blade.php",
+    "resources/views/templates/index.blade.php",
+    "resources/views/templates/editor.blade.php",
+    "database/migrations/2024_01_01_000001_create_users_table.php",
+    "database/migrations/2024_01_01_000008_create_token_transactions_table.php"
+  ],
+  "directory_structure": "app/ (Controllers, Models, Services, Jobs, Middleware), config/, database/migrations/, database/seeders/, resources/views/ (admin/, templates/, layouts/, auth/), routes/web.php, public/js/editor.js, public/css/editor.css"
+}

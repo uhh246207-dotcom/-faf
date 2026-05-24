@@ -1,0 +1,7 @@
+{
+  "task_id": "task-redemption-code-system",
+  "task_description": "Replace direct payment with a redemption code system. Admin creates one-time-use codes with token amounts. Customers redeem codes to get tokens. Add automatic tier/rank system based on render count. Add admin panel to view all code redemption history for verification purposes.",
+  "status": "in_progress",
+  "feature_order": ["FEAT-001"],
+  "blocked_reason": null
+}

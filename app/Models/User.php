@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'role',
         'token_balance',
+        'tier',
     ];
 
     /**
@@ -79,5 +80,21 @@ class User extends Authenticatable
     public function tokenTransactions()
     {
         return $this->hasMany(TokenTransaction::class);
+    }
+
+    /**
+     * Get the redemption codes used by the user.
+     */
+    public function redemptionCodes()
+    {
+        return $this->hasMany(RedemptionCode::class, 'used_by');
+    }
+
+    /**
+     * Get completed renders count.
+     */
+    public function completedRenders()
+    {
+        return $this->renders()->where('status', Render::STATUS_COMPLETED);
     }
 }

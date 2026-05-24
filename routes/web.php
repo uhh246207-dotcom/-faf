@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\RedemptionCodeController;
 use App\Http\Controllers\Admin\RenderHistoryController;
 use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\Admin\TemplateLayerController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AiEditorCommandController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RedeemCodeController;
 use App\Http\Controllers\RenderController;
 use App\Http\Controllers\TemplateEditorController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ai/editor-command', [AiEditorCommandController::class, 'process'])
         ->middleware('throttle:10,1')
         ->name('ai.editor-command');
+
+    Route::post('/redeem-code', [RedeemCodeController::class, 'redeem'])->name('redeem-code');
 });
 
 /*
@@ -75,4 +79,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/users/{user}/add-tokens', [UserController::class, 'addTokens'])->name('admin.users.add-tokens');
 
     Route::get('/renders', [RenderHistoryController::class, 'index'])->name('admin.renders.index');
+
+    Route::get('/codes', [RedemptionCodeController::class, 'index'])->name('admin.codes.index');
+    Route::get('/codes/create', [RedemptionCodeController::class, 'create'])->name('admin.codes.create');
+    Route::post('/codes', [RedemptionCodeController::class, 'store'])->name('admin.codes.store');
+    Route::post('/codes/bulk-generate', [RedemptionCodeController::class, 'bulkGenerate'])->name('admin.codes.bulk-generate');
+    Route::get('/codes/{code}', [RedemptionCodeController::class, 'show'])->name('admin.codes.show');
+    Route::post('/codes/{code}/disable', [RedemptionCodeController::class, 'disable'])->name('admin.codes.disable');
+    Route::get('/code-history', [RedemptionCodeController::class, 'history'])->name('admin.code-history');
 });

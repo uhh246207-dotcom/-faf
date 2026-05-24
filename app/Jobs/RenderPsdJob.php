@@ -6,6 +6,7 @@ use App\Models\Render;
 use App\Services\AdobeRenderService;
 use App\Services\MockRenderService;
 use App\Services\PsdRenderService;
+use App\Services\TierService;
 use App\Services\TokenService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,6 +37,10 @@ class RenderPsdJob implements ShouldQueue
                 'status' => Render::STATUS_COMPLETED,
                 'output_path' => $outputPath,
             ]);
+
+            // Update user tier after successful render
+            $tierService = new TierService();
+            $tierService->updateUserTier($this->render->user);
         } catch (\Exception $e) {
             $this->render->update([
                 'status' => Render::STATUS_FAILED,

@@ -11,6 +11,15 @@
             <p class="mt-1 text-gray-600">Chon template de bat dau chinh sua</p>
         </div>
         <div class="flex items-center space-x-4">
+            <!-- Tier Badge -->
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                @if ((Auth::user()->tier ?? 'bronze') === 'diamond') bg-purple-100 text-purple-800
+                @elseif ((Auth::user()->tier ?? 'bronze') === 'gold') bg-yellow-100 text-yellow-800
+                @elseif ((Auth::user()->tier ?? 'bronze') === 'silver') bg-gray-200 text-gray-800
+                @else bg-orange-100 text-orange-800
+                @endif">
+                {{ ucfirst(Auth::user()->tier ?? 'bronze') }}
+            </span>
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-2">
                 <span class="text-sm text-gray-500">Token cua ban:</span>
                 <span class="ml-1 text-lg font-bold text-indigo-600">{{ Auth::user()->token_balance ?? 0 }}</span>
@@ -22,8 +31,11 @@
         </div>
     </div>
 
+    <!-- Redeem Code Section -->
+    @include('components.redeem-code')
+
     <!-- Template Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         @forelse ($templates as $template)
         <a href="{{ route('templates.show', $template->slug) }}" class="group block">
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-1">

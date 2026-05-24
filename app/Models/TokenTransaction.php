@@ -12,6 +12,7 @@ class TokenTransaction extends Model
     const TYPE_DEDUCT = 'deduct';
     const TYPE_REFUND = 'refund';
     const TYPE_CREDIT = 'credit';
+    const TYPE_REDEEM = 'redeem';
 
     protected $fillable = [
         'user_id',

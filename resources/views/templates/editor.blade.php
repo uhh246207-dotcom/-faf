@@ -20,6 +20,15 @@
                 <h1 class="text-lg font-bold text-gray-900">{{ $template->name }}</h1>
             </div>
             <div class="flex items-center space-x-4">
+                <!-- Tier Badge -->
+                <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                    @if ((Auth::user()->tier ?? 'bronze') === 'diamond') bg-purple-100 text-purple-800
+                    @elseif ((Auth::user()->tier ?? 'bronze') === 'gold') bg-yellow-100 text-yellow-800
+                    @elseif ((Auth::user()->tier ?? 'bronze') === 'silver') bg-gray-200 text-gray-800
+                    @else bg-orange-100 text-orange-800
+                    @endif">
+                    {{ ucfirst(Auth::user()->tier ?? 'bronze') }}
+                </span>
                 <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                     Xuat: {{ $template->token_price }} tokens
                 </span>
@@ -244,7 +253,7 @@
 
                         <div x-show="tokenBalance < tokenPrice" class="text-center">
                             <p class="text-sm text-red-600">Khong du token de xuat anh.</p>
-                            <a href="#" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Nap token</a>
+                            <a href="{{ route('templates.index') }}" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Doi code nap token</a>
                         </div>
                     </div>
                 </div>
