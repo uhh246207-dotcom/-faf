@@ -7,15 +7,19 @@ export default function NotFound() {
         <p className="text-xs font-semibold tracking-eyebrow uppercase text-accent-1 mb-4">
           404
         </p>
-        <h1 className="text-4xl font-bold mb-3">页面未找到 · Not found</h1>
+        <h1 className="text-4xl font-bold mb-3">
+          页面未找到 · Not found · Không tìm thấy
+        </h1>
         <p className="text-fg-body mb-8">
-          你访问的页面不存在或已被移动。
+          你访问的页面不存在或已被移动。 · The page you&apos;re looking for
+          doesn&apos;t exist or has moved. · Trang bạn truy cập không tồn tại
+          hoặc đã chuyển đi.
         </p>
         <Link
           href="/"
           className="inline-flex items-center justify-center rounded-full bg-accent-grad text-white px-5 h-11 text-[15px] font-medium shadow-pill hover:-translate-y-0.5 transition-transform"
         >
-          返回首页
+          ← Home / 首页 / Trang chủ
         </Link>
       </div>
     </main>

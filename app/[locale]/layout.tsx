@@ -7,6 +7,13 @@ import {
 } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { getSiteContent } from '@/content';
+import { CartDrawer } from '@/components/cart/CartDrawer';
+import { WishlistDrawer } from '@/components/cart/WishlistDrawer';
+import { SearchPalette } from '@/components/search/SearchPalette';
+import { MobileMenu } from '@/components/MobileMenu';
+import { Toaster } from '@/components/Toaster';
+import { ScrollToTop } from '@/components/ScrollToTop';
 import '../globals.css';
 
 export const viewport: Viewport = {
@@ -41,18 +48,29 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!routing.locales.includes(locale as 'zh' | 'en')) {
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
     notFound();
   }
   setRequestLocale(locale);
 
   const messages = await getMessages();
+  const site = getSiteContent(locale);
 
   return (
     <html lang={locale}>
       <body className="font-sans bg-bg text-fg antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}
+
+          {/* Global overlays — mounted once at the layout root so they
+              float above every route. All read state from lib/ui-store
+              and lib/cart, so they're SSR-safe (initial closed/empty). */}
+          <MobileMenu brand={site.brand.name} nav={site.nav} />
+          <CartDrawer />
+          <WishlistDrawer />
+          <SearchPalette />
+          <Toaster />
+          <ScrollToTop />
         </NextIntlClientProvider>
       </body>
     </html>
