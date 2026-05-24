@@ -49,7 +49,9 @@ Route::middleware(['auth'])->group(function () {
         ->middleware('throttle:10,1')
         ->name('ai.editor-command');
 
-    Route::post('/redeem-code', [RedeemCodeController::class, 'redeem'])->name('redeem-code');
+    Route::post('/redeem-code', [RedeemCodeController::class, 'redeem'])
+        ->middleware('throttle:5,1')
+        ->name('redeem-code');
 });
 
 /*
@@ -84,7 +86,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/codes/create', [RedemptionCodeController::class, 'create'])->name('admin.codes.create');
     Route::post('/codes', [RedemptionCodeController::class, 'store'])->name('admin.codes.store');
     Route::post('/codes/bulk-generate', [RedemptionCodeController::class, 'bulkGenerate'])->name('admin.codes.bulk-generate');
-    Route::get('/codes/{code}', [RedemptionCodeController::class, 'show'])->name('admin.codes.show');
-    Route::post('/codes/{code}/disable', [RedemptionCodeController::class, 'disable'])->name('admin.codes.disable');
+    Route::get('/codes/{redemptionCode}', [RedemptionCodeController::class, 'show'])->name('admin.codes.show');
+    Route::post('/codes/{redemptionCode}/disable', [RedemptionCodeController::class, 'disable'])->name('admin.codes.disable');
     Route::get('/code-history', [RedemptionCodeController::class, 'history'])->name('admin.code-history');
 });

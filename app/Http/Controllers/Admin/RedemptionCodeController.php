@@ -139,22 +139,22 @@ class RedemptionCodeController extends Controller
     /**
      * Show single code detail.
      */
-    public function show(RedemptionCode $code)
+    public function show(RedemptionCode $redemptionCode)
     {
-        $code->load(['usedBy', 'createdBy']);
+        $redemptionCode->load(['usedBy', 'createdBy']);
 
-        return view('admin.codes.show', compact('code'));
+        return view('admin.codes.show', compact('redemptionCode'));
     }
 
     /**
      * Disable a code.
      */
-    public function disable(RedemptionCode $code)
+    public function disable(RedemptionCode $redemptionCode)
     {
         try {
-            $this->service->disableCode($code);
+            $this->service->disableCode($redemptionCode);
             return redirect()->route('admin.codes.index')
-                ->with('success', "Code {$code->code} da bi vo hieu hoa.");
+                ->with('success', "Code {$redemptionCode->code} da bi vo hieu hoa.");
         } catch (\RuntimeException $e) {
             return redirect()->route('admin.codes.index')
                 ->with('error', $e->getMessage());

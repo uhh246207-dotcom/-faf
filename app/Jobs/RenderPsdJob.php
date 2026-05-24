@@ -39,8 +39,16 @@ class RenderPsdJob implements ShouldQueue
             ]);
 
             // Update user tier after successful render
-            $tierService = new TierService();
-            $tierService->updateUserTier($this->render->user);
+            // Wrapped in its own try/catch so tier failure does NOT trigger token refund
+            try {
+                $tierService = new TierService();
+                $tierService->updateUserTier($this->render->user);
+            } catch (\Exception $e) {
+                // Log tier update failure but do not affect render result
+                \Illuminate\Support\Facades\Log::warning(
+                    "Failed to update tier for user {$this->render->user->id}: {$e->getMessage()}"
+                );
+            }
         } catch (\Exception $e) {
             $this->render->update([
                 'status' => Render::STATUS_FAILED,

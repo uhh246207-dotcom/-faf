@@ -54,8 +54,8 @@ class RedemptionCodeService
                 'used_at' => now(),
             ]);
 
-            // Credit tokens to user
-            $transaction = $this->tokenService->credit(
+            // Credit tokens to user via redeem method (uses TYPE_REDEEM)
+            $transaction = $this->tokenService->redeem(
                 $user,
                 $redemptionCode->token_amount,
                 "Doi code: {$code} (+{$redemptionCode->token_amount} tokens)"
@@ -70,21 +70,23 @@ class RedemptionCodeService
      */
     public function generateCodes(int $count, int $tokenAmount, int $adminId, ?string $note = null): array
     {
-        $codes = [];
+        return DB::transaction(function () use ($count, $tokenAmount, $adminId, $note) {
+            $codes = [];
 
-        for ($i = 0; $i < $count; $i++) {
-            $code = $this->generateUniqueCode();
+            for ($i = 0; $i < $count; $i++) {
+                $code = $this->generateUniqueCode();
 
-            $codes[] = RedemptionCode::create([
-                'code' => $code,
-                'token_amount' => $tokenAmount,
-                'status' => RedemptionCode::STATUS_ACTIVE,
-                'created_by' => $adminId,
-                'note' => $note,
-            ]);
-        }
+                $codes[] = RedemptionCode::create([
+                    'code' => $code,
+                    'token_amount' => $tokenAmount,
+                    'status' => RedemptionCode::STATUS_ACTIVE,
+                    'created_by' => $adminId,
+                    'note' => $note,
+                ]);
+            }
 
-        return $codes;
+            return $codes;
+        });
     }
 
     /**
@@ -105,10 +107,20 @@ class RedemptionCodeService
 
     /**
      * Generate a unique 8-character uppercase alphanumeric code.
+     *
+     * @throws \RuntimeException
      */
     protected function generateUniqueCode(): string
     {
+        $maxAttempts = 10;
+        $attempts = 0;
+
         do {
+            $attempts++;
+            if ($attempts > $maxAttempts) {
+                throw new \RuntimeException('Khong the tao code duy nhat sau nhieu lan thu.');
+            }
+
             $code = strtoupper(Str::random(8));
             // Ensure only alphanumeric
             $code = preg_replace('/[^A-Z0-9]/', '', $code . strtoupper(Str::random(4)));

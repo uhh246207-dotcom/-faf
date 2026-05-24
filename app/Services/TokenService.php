@@ -59,4 +59,19 @@ class TokenService
             ]);
         });
     }
+
+    public function redeem(User $user, int $amount, string $description): TokenTransaction
+    {
+        return DB::transaction(function () use ($user, $amount, $description) {
+            $user->increment('token_balance', $amount);
+
+            return TokenTransaction::create([
+                'user_id' => $user->id,
+                'amount' => $amount,
+                'type' => TokenTransaction::TYPE_REDEEM,
+                'description' => $description,
+                'render_id' => null,
+            ]);
+        });
+    }
 }
