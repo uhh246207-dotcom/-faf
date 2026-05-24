@@ -33,7 +33,16 @@ class Template extends Model
 
         static::creating(function (Template $template) {
             if (empty($template->slug)) {
-                $template->slug = Str::slug($template->name);
+                $baseSlug = Str::slug($template->name);
+                $slug = $baseSlug;
+                $counter = 1;
+
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter;
+                    $counter++;
+                }
+
+                $template->slug = $slug;
             }
         });
     }

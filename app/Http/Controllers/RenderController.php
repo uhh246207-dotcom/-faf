@@ -46,7 +46,16 @@ class RenderController extends Controller
         ]);
 
         $tokenService = new TokenService();
-        $tokenService->deduct($user, $template->token_price, $render);
+
+        try {
+            $tokenService->deduct($user, $template->token_price, $render);
+        } catch (\RuntimeException $e) {
+            $render->update(['status' => Render::STATUS_FAILED, 'error_message' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Not enough tokens',
+            ]);
+        }
 
         RenderPsdJob::dispatch($render);
 
@@ -58,9 +67,15 @@ class RenderController extends Controller
 
     public function status(Render $render)
     {
+        if ($render->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
         return response()->json([
             'status' => $render->status,
-            'output_url' => $render->output_path ? Storage::url($render->output_path) : null,
+            'download_url' => $render->status === Render::STATUS_COMPLETED
+                ? route('renders.download', $render)
+                : null,
             'error' => $render->error_message,
         ]);
     }

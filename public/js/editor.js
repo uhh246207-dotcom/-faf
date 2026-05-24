@@ -84,13 +84,13 @@ function editorComponent(layers, tokenPrice, tokenBalance, templateId) {
 
         getTextOverlayStyle(layer) {
             const style = {
-                left: (layer.preview_x || 0) + '%',
-                top: (layer.preview_y || 0) + '%',
+                left: (layer.preview_x || 0) + 'px',
+                top: (layer.preview_y || 0) + 'px',
                 fontSize: (layer.font_size || 16) + 'px',
                 color: layer.font_color || '#000000',
                 textAlign: layer.text_align || 'left',
                 zIndex: layer.z_index || 1,
-                maxWidth: (layer.preview_width || 50) + '%',
+                maxWidth: layer.preview_width ? layer.preview_width + 'px' : 'none',
                 lineHeight: '1.2',
                 fontWeight: 'bold'
             };
@@ -105,10 +105,10 @@ function editorComponent(layers, tokenPrice, tokenBalance, templateId) {
 
         getImageOverlayStyle(layer) {
             const style = {
-                left: (layer.preview_x || 0) + '%',
-                top: (layer.preview_y || 0) + '%',
-                width: (layer.preview_width || 30) + '%',
-                height: (layer.preview_height || 30) + '%',
+                left: (layer.preview_x || 0) + 'px',
+                top: (layer.preview_y || 0) + 'px',
+                width: (layer.preview_width || 100) + 'px',
+                height: (layer.preview_height || 100) + 'px',
                 zIndex: layer.z_index || 1
             };
 
@@ -193,7 +193,7 @@ function editorComponent(layers, tokenPrice, tokenBalance, templateId) {
                         this.pollInterval = null;
                         this.rendering = false;
                         this.renderComplete = true;
-                        this.outputUrl = data.output_url;
+                        this.outputUrl = data.download_url;
                         this.tokenBalance -= this.tokenPrice;
                     } else if (data.status === 'failed') {
                         clearInterval(this.pollInterval);

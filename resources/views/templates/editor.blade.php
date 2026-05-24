@@ -145,7 +145,7 @@
                             <!-- Drag & Drop Zone -->
                             <div x-show="!imagePreviews[layer.field_key]"
                                  class="drop-zone border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-indigo-400 transition cursor-pointer"
-                                 @click="$refs['file_' + layer.field_key].click()"
+                                 @click="document.getElementById('file_' + layer.field_key).click()"
                                  @dragover.prevent="$event.currentTarget.classList.add('border-indigo-500', 'bg-indigo-50')"
                                  @dragleave.prevent="$event.currentTarget.classList.remove('border-indigo-500', 'bg-indigo-50')"
                                  @drop.prevent="handleDrop(layer.field_key, $event)">
@@ -170,7 +170,7 @@
                             <!-- Hidden file input -->
                             <input type="file" :accept="layer.accepted_file_types ? '.' + layer.accepted_file_types.split(',').join(',.') : 'image/*'"
                                    class="hidden"
-                                   :x-ref="'file_' + layer.field_key"
+                                   :id="'file_' + layer.field_key"
                                    @change="handleImageUpload(layer.field_key, $event)">
                         </div>
                     </template>

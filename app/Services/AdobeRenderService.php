@@ -19,6 +19,13 @@ class AdobeRenderService implements PsdRenderService
 
     public function render(Render $render): string
     {
+        $appUrl = config('app.url', '');
+        if (str_contains($appUrl, 'localhost') || str_contains($appUrl, '127.0.0.1')) {
+            throw new \RuntimeException(
+                'Adobe API cannot be used with localhost APP_URL. Set ADOBE_MOCK=true for local development.'
+            );
+        }
+
         $accessToken = $this->getAccessToken();
         $template = $render->template;
         $layers = $template->layers()->editable()->get();

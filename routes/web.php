@@ -43,7 +43,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/renders/{render}/status', [RenderController::class, 'status'])->name('renders.status');
     Route::get('/renders/{render}/download', [RenderController::class, 'download'])->name('renders.download');
 
-    Route::post('/ai/editor-command', [AiEditorCommandController::class, 'process'])->name('ai.editor-command');
+    Route::post('/ai/editor-command', [AiEditorCommandController::class, 'process'])
+        ->middleware('throttle:10,1')
+        ->name('ai.editor-command');
 });
 
 /*

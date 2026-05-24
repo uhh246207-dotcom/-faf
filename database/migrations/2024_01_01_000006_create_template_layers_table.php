@@ -43,6 +43,7 @@ return new class extends Migration
             $table->integer('brightness')->nullable();
             $table->integer('contrast')->nullable();
             $table->integer('saturation')->nullable();
+            $table->unique(['template_id', 'field_key']);
             $table->timestamps();
         });
     }

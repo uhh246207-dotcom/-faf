@@ -12,10 +12,16 @@ class TokenService
     public function deduct(User $user, int $amount, Render $render): TokenTransaction
     {
         return DB::transaction(function () use ($user, $amount, $render) {
-            $user->decrement('token_balance', $amount);
+            $lockedUser = User::lockForUpdate()->find($user->id);
+
+            if ($lockedUser->token_balance < $amount) {
+                throw new \RuntimeException('Insufficient token balance');
+            }
+
+            $lockedUser->decrement('token_balance', $amount);
 
             return TokenTransaction::create([
-                'user_id' => $user->id,
+                'user_id' => $lockedUser->id,
                 'amount' => -$amount,
                 'type' => TokenTransaction::TYPE_DEDUCT,
                 'description' => "Render #{$render->id} for template",
